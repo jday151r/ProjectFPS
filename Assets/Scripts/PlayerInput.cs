@@ -6,7 +6,7 @@ public class PlayerInput : MonoBehaviour
 {
     [Header("References")]
     public Camera playerCam;
-    public Rigidbody rBody;
+    private Rigidbody rBody;
 
     [Header("Gameplay Variables")]
     public float lookSensitivity;
@@ -44,6 +44,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKey(KeyCode.S) && velocity.z > -maxVelocity.z) velocity += (new Vector3(0, 0, -1) * moveSpeed);
         if (Input.GetKey(KeyCode.D) && velocity.x < maxVelocity.x) velocity += (new Vector3(1, 0, 0) * moveSpeed);
         transform.Translate(velocity);
+        //Need to lerp desired velocity to current velocity to prevent jittering when moving/jumping at the same time.
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
     }
