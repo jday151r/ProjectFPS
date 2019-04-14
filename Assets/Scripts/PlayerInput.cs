@@ -5,14 +5,18 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [Header("References")]
-    public Camera playerCam;
     private Rigidbody rBody;
+    public Transform playerCam;
+    public Transform firePoint;
+    public Transform aimPoint;
+    public GameObject bullet;
 
     [Header("Gameplay Variables")]
     public float lookSensitivity;
     public float moveSpeed;
     public float jumpSpeed;
     public float velocityDecrement;
+    public float maxLookBounds;
     public bool grounded;
     public Vector3 maxVelocity;
 
@@ -24,7 +28,7 @@ public class PlayerInput : MonoBehaviour
     void Awake()
     {
         rBody = GetComponent<Rigidbody>();
-
+        playerCam = Camera.main.transform;
     }
     void Start()
     {
@@ -34,10 +38,9 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         //Viewing input
-        mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X") * lookSensitivity, -Input.GetAxisRaw("Mouse Y") * lookSensitivity);
+        mouseDelta = new Vector2(Input.GetAxis("Mouse X") * lookSensitivity, -Input.GetAxis("Mouse Y") * lookSensitivity);
         transform.Rotate(0, mouseDelta.x, 0);
-        playerCam.transform.Rotate(mouseDelta.y, 0, 0);
-
+        playerCam.Rotate(mouseDelta.y, 0, 0);
         velocity /= velocityDecrement;
         if (Input.GetKey(KeyCode.W) && velocity.z < maxVelocity.z) velocity += (new Vector3(0, 0, 1) * moveSpeed);
         if (Input.GetKey(KeyCode.A) && velocity.x > -maxVelocity.x) velocity += (new Vector3(-1, 0, 0) * moveSpeed);
@@ -47,7 +50,12 @@ public class PlayerInput : MonoBehaviour
         //Need to lerp desired velocity to current velocity to prevent jittering when moving/jumping at the same time.
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
+        if(Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        }
     }
+
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ground")) grounded = true;
@@ -59,5 +67,12 @@ public class PlayerInput : MonoBehaviour
     void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground")) grounded = false;
+    }
+    void Shoot()
+    {
+        Ray bulletTrajectory = new Ray(firePoint.position, aimPoint.position - transform.position);
+        //Debug.DrawRay(firePoint.position, aimPoint.position - firePoint.position, Color.red, 0.1f);
+        GameObject bul = Instantiate(bullet, firePoint.position, Quaternion.identity);
+        bul.GetComponent<BulletBehavior>().target = aimPoint.position;
     }
 }
