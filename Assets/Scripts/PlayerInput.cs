@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour
     public Transform firePoint;
     public Transform aimPoint;
     public GameObject bullet;
+    public GameManager GM;
 
     [Header("Gameplay Variables")]
     public float lookSensitivity;
@@ -34,6 +35,7 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        GM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -80,6 +82,7 @@ public class PlayerInput : MonoBehaviour
     }
     void Shoot()
     {
+        GM.clip--;
         Ray bulletTrajectory = new Ray(firePoint.position, aimPoint.position - transform.position);
         //Debug.DrawRay(firePoint.position, aimPoint.position - firePoint.position, Color.red, 0.1f);
         GameObject bul = Instantiate(bullet, firePoint.position, Quaternion.identity);
