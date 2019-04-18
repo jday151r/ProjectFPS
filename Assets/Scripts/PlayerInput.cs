@@ -17,6 +17,7 @@ public class PlayerInput : MonoBehaviour
     public float jumpSpeed;
     public float velocityDecrement;
     public float maxLookBounds;
+    public float simulatedDrag;
     public bool grounded;
     public Vector3 maxVelocity;
 
@@ -41,6 +42,14 @@ public class PlayerInput : MonoBehaviour
         mouseDelta = new Vector2(Input.GetAxis("Mouse X") * lookSensitivity, -Input.GetAxis("Mouse Y") * lookSensitivity);
         transform.Rotate(0, mouseDelta.x, 0);
         playerCam.Rotate(mouseDelta.y, 0, 0);
+        if (Input.GetKey(KeyCode.W)) rBody.AddRelativeForce(new Vector3(0, 0, 1) * moveSpeed);
+        if (Input.GetKey(KeyCode.A)) rBody.AddRelativeForce(new Vector3(-1, 0, 0) * moveSpeed);
+        if (Input.GetKey(KeyCode.S)) rBody.AddRelativeForce(new Vector3(0, 0, -1) * moveSpeed);
+        if (Input.GetKey(KeyCode.D)) rBody.AddRelativeForce(new Vector3(1, 0, 0) * moveSpeed);
+        rBody.velocity = new Vector3(rBody.velocity.x / simulatedDrag, rBody.velocity.y, rBody.velocity.z / simulatedDrag);
+        //Legacy movement code
+        /*
+        //moveSpeed = 0.025f in editor
         velocity /= velocityDecrement;
         if (Input.GetKey(KeyCode.W) && velocity.z < maxVelocity.z) velocity += (new Vector3(0, 0, 1) * moveSpeed);
         if (Input.GetKey(KeyCode.A) && velocity.x > -maxVelocity.x) velocity += (new Vector3(-1, 0, 0) * moveSpeed);
@@ -48,6 +57,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKey(KeyCode.D) && velocity.x < maxVelocity.x) velocity += (new Vector3(1, 0, 0) * moveSpeed);
         transform.Translate(velocity);
         //Need to lerp desired velocity to current velocity to prevent jittering when moving/jumping at the same time.
+        */
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
         if(Input.GetMouseButtonDown(0))
