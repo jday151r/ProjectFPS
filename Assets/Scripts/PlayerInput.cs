@@ -29,6 +29,9 @@ public class PlayerInput : MonoBehaviour
 
     [Header("Input")]
     public Vector2 mouseDelta;
+    private float fireTimer;
+    public float fireRate;
+    public bool autoFire;
 
     void Awake()
     {
@@ -43,6 +46,9 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        //Timer updates
+        fireTimer += Time.deltaTime;
+
         //Viewing input
         mouseDelta = new Vector2(Input.GetAxis("Mouse X") * lookSensitivity, -Input.GetAxis("Mouse Y") * lookSensitivity);
         transform.Rotate(0, mouseDelta.x, 0);
@@ -65,8 +71,9 @@ public class PlayerInput : MonoBehaviour
         */
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
-        if(Input.GetMouseButtonDown(0))
+        if((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate)
         {
+            fireTimer = 0;
             Shoot();
         }
     }
@@ -93,6 +100,9 @@ public class PlayerInput : MonoBehaviour
             if (Physics.Raycast(bulletTrajectory, out hit, bulletRange))
             {
                 GameObject hitBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
+                //bullet.transform.SetParent(visualFirePoint);
+                // ^ Doesn't work with Unity 2019.1, rip
+                //Debug.Break();
                 hitBullet.GetComponent<BulletBehavior>().target = hit.point;
                 Instantiate(bulletSplash, hit.point, Quaternion.identity);
             }
