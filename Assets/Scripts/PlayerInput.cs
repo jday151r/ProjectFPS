@@ -7,9 +7,11 @@ public class PlayerInput : MonoBehaviour
     [Header("References")]
     private Rigidbody rBody;
     public Transform playerCam;
+    public Transform visualFirePoint;
     public Transform firePoint;
     public Transform aimPoint;
     public GameObject bullet;
+    public GameObject bulletSplash;
     public GameManager GM;
 
     [Header("Gameplay Variables")]
@@ -19,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     public float velocityDecrement;
     public float maxLookBounds;
     public float simulatedDrag;
+    public float bulletRange;
     public bool grounded;
     public Vector3 maxVelocity;
 
@@ -82,10 +85,22 @@ public class PlayerInput : MonoBehaviour
     }
     void Shoot()
     {
-        GM.clip--;
-        Ray bulletTrajectory = new Ray(firePoint.position, aimPoint.position - transform.position);
-        //Debug.DrawRay(firePoint.position, aimPoint.position - firePoint.position, Color.red, 0.1f);
-        GameObject bul = Instantiate(bullet, firePoint.position, Quaternion.identity);
-        bul.GetComponent<BulletBehavior>().target = aimPoint.position;
+        if (GM.clip > 0)
+        {
+            GM.clip--;
+            RaycastHit hit;
+            Ray bulletTrajectory = new Ray(firePoint.position, playerCam.transform.forward);
+            if (Physics.Raycast(bulletTrajectory, out hit, bulletRange))
+            {
+                GameObject hitBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
+                hitBullet.GetComponent<BulletBehavior>().target = hit.point;
+                Instantiate(bulletSplash, hit.point, Quaternion.identity);
+            }
+            else
+            {
+                GameObject missedBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
+                missedBullet.GetComponent<BulletBehavior>().target = aimPoint.position;
+            }
+        }
     }
 }
