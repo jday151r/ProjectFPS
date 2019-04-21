@@ -1,20 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public int ammo;
     public int clip;
     public int clipSize;
+    public TextMeshProUGUI remainingAmmo;
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Update()
     {
+        remainingAmmo.text = ammo.ToString();
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
