@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -25,8 +26,6 @@ public class PlayerInput : MonoBehaviour
     public bool grounded;
     public Vector3 maxVelocity;
 
-    private Vector3 velocity;
-
     [Header("Input")]
     public Vector2 mouseDelta;
     private float fireTimer;
@@ -37,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     {
         rBody = GetComponent<Rigidbody>();
         playerCam = Camera.main.transform;
+        //PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
     }
     void Start()
     {
@@ -71,6 +71,7 @@ public class PlayerInput : MonoBehaviour
         */
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
+
         if((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate)
         {
             fireTimer = 0;
@@ -100,15 +101,14 @@ public class PlayerInput : MonoBehaviour
             if (Physics.Raycast(bulletTrajectory, out hit, bulletRange))
             {
                 GameObject hitBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
-                //bullet.transform.SetParent(visualFirePoint);
-                // ^ Doesn't work with Unity 2019.1, rip
-                //Debug.Break();
+                hitBullet.transform.SetParent(visualFirePoint);
                 hitBullet.GetComponent<BulletBehavior>().target = hit.point;
                 Instantiate(bulletSplash, hit.point, Quaternion.identity);
             }
             else
             {
                 GameObject missedBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
+                missedBullet.transform.SetParent(playerCam);
                 missedBullet.GetComponent<BulletBehavior>().target = aimPoint.position;
             }
         }
