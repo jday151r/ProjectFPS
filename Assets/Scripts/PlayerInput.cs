@@ -108,7 +108,7 @@ public class PlayerInput : MonoBehaviour
             else
             {
                 GameObject missedBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
-                missedBullet.transform.SetParent(playerCam);
+                missedBullet.transform.SetParent(visualFirePoint);
                 missedBullet.GetComponent<BulletBehavior>().target = aimPoint.position;
             }
         }
