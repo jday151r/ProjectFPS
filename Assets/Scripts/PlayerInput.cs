@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 
 public class PlayerInput : MonoBehaviour
@@ -8,28 +9,40 @@ public class PlayerInput : MonoBehaviour
     [Header("References")]
     private Rigidbody rBody;
     public Transform playerCam;
+    private Camera playerCamScript;
     public Transform visualFirePoint;
     public Transform firePoint;
     public Transform aimPoint;
+    public GameObject gun;
     public GameObject bullet;
     public GameObject bulletSplash;
     public GameManager GM;
+    public RawImage scopeImage;
 
     [Header("Gameplay Variables")]
-    public float lookSensitivity;
+    public float defaultLookSensitivity;
+    private float lookSensitivity;
     public float moveSpeed;
     public float jumpSpeed;
     public float velocityDecrement;
     public float maxLookBounds;
     public float simulatedDrag;
     public float bulletRange;
+    public float scopeLerp;
+    public float defaultFOV;
+    public float zoomedFOV;
+    public float gunBobFactor;
     public bool grounded;
+    public bool scoped;
     public Vector3 maxVelocity;
     private Vector3 inputVector;
+    public Vector3 hipFirePosition;
+    public Vector3 scopedPosition;
 
     [Header("Input")]
     public Vector2 mouseDelta;
     private float fireTimer;
+    private float gunBobTimer;
     public float fireRate;
     public bool autoFire;
 
@@ -37,6 +50,7 @@ public class PlayerInput : MonoBehaviour
     {
         rBody = GetComponent<Rigidbody>();
         playerCam = Camera.main.transform;
+        playerCamScript = Camera.main;
     }
     void Start()
     {
@@ -47,7 +61,9 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         //Timer updates
-        fireTimer += Time.deltaTime;
+        float deltaTime = Time.deltaTime;
+        fireTimer += deltaTime;
+        //if (lerpTimer >= 1) lerpTimer = 0;
 
         //Viewing input
         mouseDelta = new Vector2(Input.GetAxis("Mouse X") * lookSensitivity, -Input.GetAxis("Mouse Y") * lookSensitivity);
@@ -64,7 +80,49 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
 
-        if((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate)
+        //if (Input.GetKey(KeyCode.LeftShift))
+        //{
+        //    scoped = true;
+        //    lookSensitivity = defaultLookSensitivity * (zoomedFOV / defaultFOV);
+        //    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, scopedPosition, scopeLerp);
+        //    playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, zoomedFOV, scopeLerp);
+        //    Color scopeColor = scopeImage.color;
+        //    scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 1, scopeLerp / 2));
+        //}
+        //else
+        //{
+        //    lookSensitivity = defaultLookSensitivity;
+        //    scoped = false;
+        //    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, hipFirePosition, scopeLerp);
+        //    playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, defaultFOV, scopeLerp);
+        //    Color scopeColor = scopeImage.color;
+        //    scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 0, scopeLerp / 2));
+        //}
+        if (Input.GetKey(KeyCode.LeftShift)) scoped = true;
+        else scoped = false;
+
+        if (scoped)
+        {
+            lookSensitivity = defaultLookSensitivity * (zoomedFOV / defaultFOV);
+            gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, scopedPosition, scopeLerp);
+            playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, zoomedFOV, scopeLerp);
+            Color scopeColor = scopeImage.color;
+            scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 1, scopeLerp / 2));
+        }
+        else
+        {
+            lookSensitivity = defaultLookSensitivity;
+            gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, hipFirePosition, scopeLerp);
+            playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, defaultFOV, scopeLerp);
+            Color scopeColor = scopeImage.color;
+            scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 0, scopeLerp / 2));
+        }
+
+        //Gun bobs up and down - slow if idle, fast if moving
+        gunBobTimer += deltaTime * ( (scoped || !grounded) ? 0.1f : (rBody.velocity.magnitude + 1));
+        gun.transform.localPosition += new Vector3(0, (Mathf.Sin(gunBobTimer * Mathf.PI) / gunBobFactor) * deltaTime, 0);
+
+        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate)
         {
             fireTimer = 0;
             Shoot();

@@ -8,6 +8,7 @@ public class AmmoUI : MonoBehaviour
     private RectTransform rectTransform;
     private Vector2 imageDimensions;
     private GameManager GM;
+    public bool background;
 
     void Start()
     {
@@ -18,6 +19,7 @@ public class AmmoUI : MonoBehaviour
     
     void Update()
     {
-        rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.clip, imageDimensions.y);
+        if(!background) rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.clip, imageDimensions.y);
+        else rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.clipSize, imageDimensions.y);
     }
 }

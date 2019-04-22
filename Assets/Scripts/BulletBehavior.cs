@@ -8,13 +8,18 @@ public class BulletBehavior : MonoBehaviour
     public BulletType bulletType;
     public Vector3 target;
     public LineRenderer line;
+    public GameObject effect;
     public float lifeTime;
     private float timer;
 
     void Update()
     {
         timer += Time.deltaTime;
-        if(timer >= lifeTime) Destroy(gameObject);
+        if (timer >= lifeTime)
+        {
+            effect.transform.parent = null;
+            Destroy(gameObject);
+        }
 
         switch (bulletType)
         {
