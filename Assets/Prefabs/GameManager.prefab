@@ -43,6 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6863b4c58a45f43a490908be653d7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: 50
-  clip: 10
-  clipSize: 10
+  ammo: 30
+  clip: 20
+  clipSize: 20
+  remainingAmmo: {fileID: 0}
+  gunAnimator: {fileID: 0}
+  reloadAnim: {fileID: 0}

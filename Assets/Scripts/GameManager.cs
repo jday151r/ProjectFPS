@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public int ammo;
     public int clip;
     public int clipSize;
+    public bool reloading;
     public TextMeshProUGUI remainingAmmo;
     public Animator gunAnimator;
     public AnimationClip reloadAnim;
@@ -19,28 +20,34 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        gunAnimator.SetBool("Reload", false);
+        gunAnimator.SetBool("Reload", false); //Ensures animation does not play more than onceS
         remainingAmmo.text = ammo.ToString();
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Reload();
-        }
-        
+        if ((Input.GetKeyDown(KeyCode.R) || clip == 0) && CanReload())
+            gunAnimator.SetBool("Reload", true);
     }
 
-    void Reload()
+    public void Reload()
     {
-        if (ammo - (clipSize - clip) >= 0)
+        if (clip < clipSize) //If there are bullets missing from the clip
         {
-            ammo -= clipSize - clip;
-            clip += clipSize - clip;
-            gunAnimator.SetBool("Reload", true);
+            if (ammo - (clipSize - clip) >= 0) //See if we have enough ammo to reload the clip
+            {
+                ammo -= clipSize - clip;
+                clip += clipSize - clip;
+                gunAnimator.SetBool("Reload", true);
+            }
+            else if(ammo > 0) //Fill the clip with the rest of the ammo
+            {
+                clip += ammo;
+                ammo = 0;
+                gunAnimator.SetBool("Reload", true);
+            }
         }
-        else
-        {
-            clip += ammo;
-            ammo = 0;
-            gunAnimator.SetBool("Reload", true);
-        }
+        reloading = false;
+    }
+    public bool CanReload()
+    {
+        //See if there are bullets missing from the clip, and if there is any ammo left
+        return clip < clipSize && ammo > 0;
     }
 }

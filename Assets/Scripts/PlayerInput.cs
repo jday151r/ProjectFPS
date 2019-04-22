@@ -101,7 +101,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift)) scoped = true;
         else scoped = false;
 
-        if (scoped)
+        if (scoped && !GM.reloading)
         {
             lookSensitivity = defaultLookSensitivity * (zoomedFOV / defaultFOV);
             gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, scopedPosition, scopeLerp);
@@ -122,7 +122,7 @@ public class PlayerInput : MonoBehaviour
         gunBobTimer += deltaTime * ( (scoped || !grounded) ? 0.1f : (rBody.velocity.magnitude + 1));
         gun.transform.localPosition += new Vector3(0, (Mathf.Sin(gunBobTimer * Mathf.PI) / gunBobFactor) * deltaTime, 0);
 
-        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate)
+        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate && !GM.reloading)
         {
             fireTimer = 0;
             Shoot();
