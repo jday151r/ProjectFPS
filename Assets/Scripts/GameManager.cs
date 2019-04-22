@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public int clip;
     public int clipSize;
     public TextMeshProUGUI remainingAmmo;
+    public Animator gunAnimator;
+    public AnimationClip reloadAnim;
 
     void Awake()
     {
@@ -17,11 +19,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        gunAnimator.SetBool("Reload", false);
         remainingAmmo.text = ammo.ToString();
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
         }
+        
     }
 
     void Reload()
@@ -30,11 +34,13 @@ public class GameManager : MonoBehaviour
         {
             ammo -= clipSize - clip;
             clip += clipSize - clip;
+            gunAnimator.SetBool("Reload", true);
         }
         else
         {
             clip += ammo;
             ammo = 0;
+            gunAnimator.SetBool("Reload", true);
         }
     }
 }
