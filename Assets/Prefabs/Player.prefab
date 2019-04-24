@@ -946,11 +946,11 @@ MonoBehaviour:
   defaultFOV: 60
   zoomedFOV: 30
   gunBobFactor: 10
-  grounded: 0
+  grounded: 1
   scoped: 0
   maxVelocity: {x: 0.1, y: 0, z: 0.1}
   hipFirePosition: {x: 0.414, y: -0.219, z: 1.051}
-  scopedPosition: {x: 0, y: -0.096, z: 0.28}
+  scopedPosition: {x: 0, y: -0.16, z: 0.28}
   mouseDelta: {x: 0, y: 0}
 --- !u!1 &2682538795893689420
 GameObject:
