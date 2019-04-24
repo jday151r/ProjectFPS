@@ -10,14 +10,10 @@ public class PlayerInput : MonoBehaviour
     private Rigidbody rBody;
     public Transform playerCam;
     private Camera playerCamScript;
-    public Transform visualFirePoint;
-    public Transform firePoint;
-    public Transform aimPoint;
     public GameObject gun;
-    public GameObject bullet;
-    public GameObject bulletSplash;
     public GameManager GM;
     public RawImage scopeImage;
+    public GunEvents gunEvents;
 
     [Header("Gameplay Variables")]
     public float defaultLookSensitivity;
@@ -43,8 +39,6 @@ public class PlayerInput : MonoBehaviour
     public Vector2 mouseDelta;
     private float fireTimer;
     private float gunBobTimer;
-    public float fireRate;
-    public bool autoFire;
 
     void Awake()
     {
@@ -60,10 +54,8 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        //Timer updates
+        //Timers
         float deltaTime = Time.deltaTime;
-        fireTimer += deltaTime;
-        //if (lerpTimer >= 1) lerpTimer = 0;
 
         //Viewing input
         mouseDelta = new Vector2(Input.GetAxis("Mouse X") * lookSensitivity, -Input.GetAxis("Mouse Y") * lookSensitivity);
@@ -80,28 +72,10 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded) rBody.AddForce(new Vector3(0, 1, 0) * jumpSpeed);
 
-        //if (Input.GetKey(KeyCode.LeftShift))
-        //{
-        //    scoped = true;
-        //    lookSensitivity = defaultLookSensitivity * (zoomedFOV / defaultFOV);
-        //    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, scopedPosition, scopeLerp);
-        //    playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, zoomedFOV, scopeLerp);
-        //    Color scopeColor = scopeImage.color;
-        //    scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 1, scopeLerp / 2));
-        //}
-        //else
-        //{
-        //    lookSensitivity = defaultLookSensitivity;
-        //    scoped = false;
-        //    gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, hipFirePosition, scopeLerp);
-        //    playerCamScript.fieldOfView = Mathf.Lerp(playerCamScript.fieldOfView, defaultFOV, scopeLerp);
-        //    Color scopeColor = scopeImage.color;
-        //    scopeImage.color = new Color(scopeColor.r, scopeColor.g, scopeColor.b, Mathf.Lerp(scopeImage.color.a, 0, scopeLerp / 2));
-        //}
         if (Input.GetKey(KeyCode.LeftShift)) scoped = true;
         else scoped = false;
 
-        if (scoped && !GM.reloading)
+        if (scoped && gunEvents.canShoot)
         {
             lookSensitivity = defaultLookSensitivity * (zoomedFOV / defaultFOV);
             gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, scopedPosition, scopeLerp);
@@ -121,12 +95,6 @@ public class PlayerInput : MonoBehaviour
         //Gun bobs up and down - slow if idle, fast if moving
         gunBobTimer += deltaTime * ( (scoped || !grounded) ? 0.1f : (rBody.velocity.magnitude + 1));
         gun.transform.localPosition += new Vector3(0, (Mathf.Sin(gunBobTimer * Mathf.PI) / gunBobFactor) * deltaTime, 0);
-
-        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && fireTimer >= fireRate && !GM.reloading)
-        {
-            fireTimer = 0;
-            Shoot();
-        }
     }
 
     void OnCollisionEnter(Collision other)
@@ -140,27 +108,5 @@ public class PlayerInput : MonoBehaviour
     void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground")) grounded = false;
-    }
-    void Shoot()
-    {
-        if (GM.clip > 0)
-        {
-            GM.clip--;
-            RaycastHit hit;
-            Ray bulletTrajectory = new Ray(firePoint.position, playerCam.transform.forward);
-            if (Physics.Raycast(bulletTrajectory, out hit, bulletRange))
-            {
-                GameObject hitBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
-                hitBullet.transform.SetParent(visualFirePoint);
-                hitBullet.GetComponent<BulletBehavior>().target = hit.point;
-                Instantiate(bulletSplash, hit.point, Quaternion.identity);
-            }
-            else
-            {
-                GameObject missedBullet = Instantiate(bullet, visualFirePoint.position, Quaternion.identity);
-                missedBullet.transform.SetParent(visualFirePoint);
-                missedBullet.GetComponent<BulletBehavior>().target = aimPoint.position;
-            }
-        }
     }
 }

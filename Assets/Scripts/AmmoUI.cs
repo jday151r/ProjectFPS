@@ -19,7 +19,7 @@ public class AmmoUI : MonoBehaviour
     
     void Update()
     {
-        if(!background) rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.clip, imageDimensions.y);
-        else rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.clipSize, imageDimensions.y);
+        if(!background) rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.gun.clip, imageDimensions.y);
+        else rectTransform.sizeDelta = new Vector2(imageDimensions.x * GM.gun.clipSize, imageDimensions.y);
     }
 }

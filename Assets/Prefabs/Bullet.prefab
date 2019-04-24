@@ -4859,7 +4859,7 @@ MonoBehaviour:
   target: {x: 0, y: 0, z: 0}
   line: {fileID: 2946347052338794029}
   effect: {fileID: 5988043975342429229}
-  lifeTime: 0.02
+  lifeTime: 0.05
 --- !u!120 &2946347052338794029
 LineRenderer:
   m_ObjectHideFlags: 0
