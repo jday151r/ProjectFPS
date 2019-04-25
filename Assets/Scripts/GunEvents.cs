@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GunEvents : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class GunEvents : MonoBehaviour
     public Transform aimPoint;
     public GameObject bullet;
     public GameObject bulletSplash;
-    
+
     public float bulletRange;
 
     [Header("Gameplay Variables")]
@@ -41,13 +39,16 @@ public class GunEvents : MonoBehaviour
 
         //Ensures animations do not play more than once
         animator.SetBool("Reload", false);
-        animator.SetBool("Shoot", false);
+
         if ((Input.GetKeyDown(KeyCode.R) || clip == 0) && CanReload())
             animator.SetBool("Reload", true);
-        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && canShoot)
+
+        if ((autoFire ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && canShoot && clip > 0 && fireTimer >= fireRate)
         {
-            animator.SetBool("Shoot", true);
+            fireTimer = 0; //Reset the fire timer
+            animator.Play("Shoot", 0, 0f);
         }
+
     }
     //Animator events
     void EnableShooting()
