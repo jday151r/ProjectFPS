@@ -713,6 +713,7 @@ MonoBehaviour:
   bullet: {fileID: 8978371541979761328, guid: 8d2f9e2926dbf9d46a8aa88a08517ba2, type: 3}
   bulletSplash: {fileID: 3075102932279195535, guid: cbe2ef9bf9cc3e34180edd3da8de0afa,
     type: 3}
+  player: {fileID: 2619062254120903461}
   bulletRange: 20
   clip: 20
   clipSize: 20
@@ -720,7 +721,9 @@ MonoBehaviour:
   canShoot: 1
   autoFire: 1
   fireTimer: 0
-  fireRate: 0
+  fireRate: 0.15
+  gunBobTimer: 0
+  gunBobFactor: 5
 --- !u!1 &2619062253897296804
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,7 +827,7 @@ GameObject:
   - component: {fileID: 2619062254120903461}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -930,6 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e8453b4e25742469df40d803dfd3f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rBody: {fileID: 0}
   playerCam: {fileID: 2619062253897296827}
   gun: {fileID: 2619062253831009555}
   GM: {fileID: 0}
@@ -945,13 +949,13 @@ MonoBehaviour:
   scopeLerp: 0.5
   defaultFOV: 60
   zoomedFOV: 30
-  gunBobFactor: 10
   grounded: 1
   scoped: 0
   maxVelocity: {x: 0.1, y: 0, z: 0.1}
-  hipFirePosition: {x: 0.414, y: -0.219, z: 1.051}
+  hipFirePosition: {x: 0.243, y: -0.141, z: 0.859}
   scopedPosition: {x: 0, y: -0.16, z: 0.28}
   mouseDelta: {x: 0, y: 0}
+  joystick: 0
 --- !u!1 &2682538795893689420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,17 +1306,17 @@ PrefabInstance:
     - target: {fileID: 1284000517044920186, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.414
+      value: 0.243
       objectReference: {fileID: 0}
     - target: {fileID: 1284000517044920186, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.21899998
+      value: -0.141
       objectReference: {fileID: 0}
     - target: {fileID: 1284000517044920186, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.051
+      value: 0.859
       objectReference: {fileID: 0}
     - target: {fileID: 1284000517044920186, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
         type: 3}
