@@ -92,8 +92,6 @@ public class GunEvents : MonoBehaviour
         {
             gunBobTimer += deltaTime * (!player.grounded ? 0.1f : (player.rBody.velocity.magnitude + 1));
             transform.localPosition += new Vector3(0, (Mathf.Sin(gunBobTimer * Mathf.PI) / gunBobFactor) * deltaTime, 0);
-            //gunBobTimer += deltaTime * (player.rBody.velocity.magnitude + 1);
-            //transform.localPosition += new Vector3(0, (Mathf.Sin(gunBobTimer * Mathf.PI) / gunBobFactor) * deltaTime, 0);
         }
     }
     //Animator events
