@@ -816,12 +816,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1386373689}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2101898221 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5712248936494277659, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-    type: 3}
-  m_PrefabInstance: {fileID: 2619062253624803818}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2183335802151151008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5997543683906214034, guid: a16ac5ca092c7d74abc2c3aaf70183f6,
@@ -931,49 +925,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
         type: 3}
-      propertyPath: gunBobFactor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: defaultFOV
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: zoomedFOV
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: hipFirePosition.x
-      value: 0.243
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: hipFirePosition.y
-      value: -0.141
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: hipFirePosition.z
-      value: 0.859
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: scopedPosition.y
-      value: -0.0947
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
       propertyPath: scopedPosition.z
-      value: 0.42
+      value: 0.44
       objectReference: {fileID: 0}
-    - target: {fileID: 4227210404794719681, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: scopeLens
-      value: 
-      objectReference: {fileID: 2101898221}
     - target: {fileID: 2619062254120903481, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1036,23 +990,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2619062254120903461, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
         type: 3}
-      propertyPath: scopedPosition.y
-      value: -0.0947
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619062254120903461, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: scopedPosition.z
-      value: 0.44
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619062254120903461, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
       propertyPath: scopeLerp
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619062254120903461, guid: 72ec49ce6c50b9a4aa4f183e438aedde,
-        type: 3}
-      propertyPath: joystick
-      value: 0
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72ec49ce6c50b9a4aa4f183e438aedde, type: 3}

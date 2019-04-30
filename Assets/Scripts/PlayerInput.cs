@@ -30,8 +30,6 @@ public class PlayerInput : MonoBehaviour
     public bool scoped;
     public Vector3 maxVelocity;
     private Vector3 inputVector;
-    public Vector3 hipFirePosition;
-    public Vector3 scopedPosition;
 
     [Header("Input")]
     public Vector2 lookDelta;

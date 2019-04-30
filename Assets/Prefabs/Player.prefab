@@ -334,14 +334,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 0.5, b: 0, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 466aabde4d729094fa6344dfd2a584ab, type: 3}
+  m_Texture: {fileID: 2800000, guid: f6abcf3f15a295e45b70813e825f51d1, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -714,6 +714,8 @@ MonoBehaviour:
   bulletSplash: {fileID: 3075102932279195535, guid: cbe2ef9bf9cc3e34180edd3da8de0afa,
     type: 3}
   player: {fileID: 2619062254120903461}
+  scopeLens: {fileID: 5712248936494277659}
+  playerCamScript: {fileID: 0}
   bulletRange: 20
   clip: 20
   clipSize: 20
@@ -723,7 +725,11 @@ MonoBehaviour:
   fireTimer: 0
   fireRate: 0.15
   gunBobTimer: 0
-  gunBobFactor: 5
+  gunBobFactor: 50
+  defaultFOV: 60
+  zoomedFOV: 20
+  hipFirePosition: {x: 0.243, y: -0.141, z: 0.859}
+  scopedPosition: {x: 0, y: -0.0947, z: 0.42}
 --- !u!1 &2619062253897296804
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,11 +941,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rBody: {fileID: 0}
   playerCam: {fileID: 2619062253897296827}
+  playerCamScript: {fileID: 0}
   gun: {fileID: 2619062253831009555}
   GM: {fileID: 0}
   scopeImage: {fileID: 1492901437}
   gunEvents: {fileID: 4227210404794719681}
   defaultLookSensitivity: 5
+  lookSensitivity: 0
   moveSpeed: 35
   jumpSpeed: 300
   velocityDecrement: 1.25
@@ -947,14 +955,13 @@ MonoBehaviour:
   simulatedDrag: 1.1
   bulletRange: 20
   scopeLerp: 0.5
+  scopePosition: 0
   defaultFOV: 60
   zoomedFOV: 30
   grounded: 1
   scoped: 0
   maxVelocity: {x: 0.1, y: 0, z: 0.1}
-  hipFirePosition: {x: 0.243, y: -0.141, z: 0.859}
-  scopedPosition: {x: 0, y: -0.16, z: 0.28}
-  mouseDelta: {x: 0, y: 0}
+  lookDelta: {x: 0, y: 0}
   joystick: 0
 --- !u!1 &2682538795893689420
 GameObject:
@@ -1363,14 +1370,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleRifle1
       objectReference: {fileID: 0}
+    - target: {fileID: 6101000237647038654, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101000237647038654, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021948176781896263, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 2534964839176971238, guid: 4e57873f639ef014fa54b97733c79e6f,
+        type: 3}
+    - target: {fileID: 8848610853028796094, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 685f38b764f24074789f9aaf0eae05b4, type: 2}
+    - target: {fileID: 8848610853453922114, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 685f38b764f24074789f9aaf0eae05b4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c7f4c1b54c2d0042819cfadc3a2c579, type: 3}
---- !u!4 &2619062252992968895 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1284000516201632469, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
-    type: 3}
-  m_PrefabInstance: {fileID: 3857729542862563946}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2619062253831009552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1284000517044920186, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
@@ -1380,6 +1407,18 @@ Transform:
 --- !u!1 &2619062253831009555 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1284000517044920185, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+    type: 3}
+  m_PrefabInstance: {fileID: 3857729542862563946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2619062252992968895 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1284000516201632469, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
+    type: 3}
+  m_PrefabInstance: {fileID: 3857729542862563946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5712248936494277659 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8848610851939307121, guid: 3c7f4c1b54c2d0042819cfadc3a2c579,
     type: 3}
   m_PrefabInstance: {fileID: 3857729542862563946}
   m_PrefabAsset: {fileID: 0}
